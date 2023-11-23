@@ -48,11 +48,16 @@ public class HhhProxyInstance implements InvocationHandler {
             }
 
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
+            public void onResponse(Call call, Response response) {
                 Type genericReturnType = method.getGenericReturnType();
                 ObjectMapper objectMapper = new ObjectMapper();
                 JavaType javaType = getJavaType(objectMapper, genericReturnType, hhhClientModel.getClazz());
-                Object o = objectMapper.readValue(response.body().byteStream(), javaType);
+                Object o = null;
+                try {
+                    o = objectMapper.readValue(response.body().byteStream(), javaType);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 objectAtomicReference.set(o);
             }
         });
