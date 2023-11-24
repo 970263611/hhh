@@ -1,9 +1,8 @@
 package com.dahuaboke.hhh.bean;
 
-import com.dahuaboke.hhh.annotation.HhhClient;
-import com.dahuaboke.hhh.bean.HhhFactoryBean;
+import com.dahuaboke.hhh.SocketContext;
+import com.dahuaboke.hhh.annotation.Hhh;
 import com.dahuaboke.hhh.consts.HhhConst;
-import com.dahuaboke.hhh.model.HhhClientModel;
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinitionHolder;
@@ -31,7 +30,7 @@ import java.util.function.Supplier;
  * date: 2023/11/20 11:30
  */
 @Component
-public class HhhClientBeanProcessor implements ImportBeanDefinitionRegistrar, EnvironmentAware {
+public class ClientBeanProcessor implements ImportBeanDefinitionRegistrar, EnvironmentAware {
 
     private Environment environment;
 
@@ -51,7 +50,7 @@ public class HhhClientBeanProcessor implements ImportBeanDefinitionRegistrar, En
                 return isCandidate;
             }
         };
-        scanner.addIncludeFilter(new AnnotationTypeFilter(HhhClient.class));
+        scanner.addIncludeFilter(new AnnotationTypeFilter(Hhh.class));
         String basePackages = environment.getProperty(HhhConst.SCAN_BASE_PACKAGE);
         for (String basePackage : basePackages.split(",")) {
             beanDefinitionSet.addAll(scanner.findCandidateComponents(basePackage));
@@ -62,7 +61,7 @@ public class HhhClientBeanProcessor implements ImportBeanDefinitionRegistrar, En
                 AnnotatedBeanDefinition beanDefinition = (AnnotatedBeanDefinition) candidateComponent;
                 AnnotationMetadata annotationMetadata = beanDefinition.getMetadata();
                 Assert.isTrue(annotationMetadata.isInterface(), "@HhhClient can only be specified on an interface");
-                Map<String, Object> attributes = annotationMetadata.getAnnotationAttributes(HhhClient.class.getCanonicalName());
+                Map<String, Object> attributes = annotationMetadata.getAnnotationAttributes(Hhh.class.getCanonicalName());
                 registerFeignClient(registry, annotationMetadata, attributes);
             }
         }
@@ -74,7 +73,8 @@ public class HhhClientBeanProcessor implements ImportBeanDefinitionRegistrar, En
         Class clazz = ClassUtils.resolveClassName(className, null);
         String name = (String) attributes.get("name");
         String url = (String) attributes.get("url");
-        HhhClientModel hhhClientModel = new HhhClientModel(name, url, clazz);
+        String contentType = (String) attributes.get("contentType");
+        SocketContext hhhClientModel = new SocketContext(name, url, contentType, clazz);
         HhhFactoryBean hhhFactoryBean = new HhhFactoryBean(hhhClientModel);
         BeanDefinitionBuilder definition = BeanDefinitionBuilder.genericBeanDefinition(clazz, (Supplier) () -> hhhFactoryBean.getObject());
         definition.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE);

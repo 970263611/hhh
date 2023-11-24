@@ -3,7 +3,7 @@ package com.dahuaboke.hhh.bean;
 import com.dahuaboke.hhh.handler.DirectHandler;
 import com.dahuaboke.hhh.handler.LoadBalancerHandler;
 import com.dahuaboke.hhh.handler.RequestHandler;
-import com.dahuaboke.hhh.model.HhhClientModel;
+import com.dahuaboke.hhh.SocketContext;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
@@ -16,31 +16,31 @@ import java.lang.reflect.Proxy;
  */
 public class HhhFactoryBean implements FactoryBean {
 
-    private HhhClientModel hhhClientModel;
+    private SocketContext socketContext;
 
-    public HhhFactoryBean(HhhClientModel hhhClientModel) {
-        this.hhhClientModel = hhhClientModel;
+    public HhhFactoryBean(SocketContext socketContext) {
+        this.socketContext = socketContext;
     }
 
     @Override
     public Object getObject() {
         RequestHandler requestHandler;
-        String key = hhhClientModel.getUrl();
+        String key = socketContext.getUrl();
         if (StringUtils.isEmpty(key)) {
-            key = hhhClientModel.getName();
-            Assert.isNull(key, "param name or url can not all empty");
+            key = socketContext.getName();
+            Assert.isNull(key, "param name and url can not all empty");
             requestHandler = new LoadBalancerHandler();
         } else {
             requestHandler = new DirectHandler();
         }
-        Class clazz = hhhClientModel.getClazz();
-        hhhClientModel.setRequestHandler(requestHandler);
-        return Proxy.newProxyInstance(clazz.getClassLoader(), new Class[]{clazz}, new HhhProxyInstance(hhhClientModel));
+        Class clazz = socketContext.getClazz();
+        socketContext.setRequestHandler(requestHandler);
+        return Proxy.newProxyInstance(clazz.getClassLoader(), new Class[]{clazz}, new ProxyInstance(socketContext));
     }
 
     @Override
     public Class<?> getObjectType() {
-        return hhhClientModel.getClazz();
+        return socketContext.getClazz();
     }
 
     @Override

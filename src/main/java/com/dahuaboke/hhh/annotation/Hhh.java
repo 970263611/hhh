@@ -1,5 +1,7 @@
 package com.dahuaboke.hhh.annotation;
 
+import com.dahuaboke.hhh.consts.HhhConst;
+
 import java.lang.annotation.*;
 
 /**
@@ -10,9 +12,11 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Inherited
-public @interface HhhClient {
+public @interface Hhh {
 
     String name() default "";
 
     String url() default "";
+
+    String contentType() default HhhConst.DEFAULT_REQUEST_CONTENT_TYPE;
 }
