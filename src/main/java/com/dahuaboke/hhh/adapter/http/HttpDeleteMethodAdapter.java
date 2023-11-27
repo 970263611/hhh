@@ -1,6 +1,8 @@
 package com.dahuaboke.hhh.adapter.http;
 
 import com.dahuaboke.hhh.enums.HttpMethod;
+import com.dahuaboke.hhh.http.HttpBuilder;
+import com.dahuaboke.hhh.http.HttpDeleteBuilder;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -28,5 +30,10 @@ public class HttpDeleteMethodAdapter extends AbstractHttpMethodAdapter {
     @Override
     public Class matchSpringMvcClass() {
         return DeleteMapping.class;
+    }
+
+    @Override
+    public Class<? extends HttpBuilder> matchHttpBuilder() {
+        return HttpDeleteBuilder.class;
     }
 }

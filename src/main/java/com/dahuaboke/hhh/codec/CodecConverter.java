@@ -9,9 +9,13 @@ import java.lang.reflect.Type;
  * author: dahua
  * date: 2023/11/24 14:41
  */
-public interface EncoderAndDecoder {
+public interface CodecConverter {
 
     String encode(Object... objs);
 
-    Object decode(InputStream inputStream, Type type, @Nullable Class<?> contextClass);
+    Object decode(InputStream inputStream, Type type, @Nullable Class<?> clazz);
+
+    boolean canEncode();
+
+    boolean canDecode();
 }

@@ -31,9 +31,9 @@ public class OkHttpClient extends HttpClient {
 
     @Override
     public void sendRequest(Request request) {
-        Object requestParam = request.getRequestParam();
-        if (requestParam instanceof okhttp3.Request) {
-            okhttp3.Request param = (okhttp3.Request) requestParam;
+        Object builder = request.getRequest();
+        if (builder instanceof okhttp3.Request) {
+            okhttp3.Request param = (okhttp3.Request) builder;
             client.newCall(param).enqueue(new Callback() {
                 @Override
                 public void onFailure(@NotNull Call call, @NotNull IOException e) {

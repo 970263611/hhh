@@ -16,13 +16,19 @@ import java.lang.reflect.Method;
  */
 public class DirectHandler implements RequestHandler {
 
+    private boolean enableHttps;
+
+    public DirectHandler(boolean enableHttps) {
+        this.enableHttps = enableHttps;
+    }
+
     @Override
     public void handler(SocketContext socketContext) {
         Callback callback = socketContext.getCallback();
-        String param = socketContext.getParam();
         RequestFactory requestFactory = SpringUtils.getBean(RequestFactory.class);
         String url = calculatingUrl(socketContext);
-        com.dahuaboke.hhh.Request request = requestFactory.createRequest(url, socketContext.getContentType(), param);
+        socketContext.setUrl(url);
+        com.dahuaboke.hhh.Request request = requestFactory.createRequest(socketContext);
         request.setCallback(callback);
         SocketClient socketClient = SpringUtils.getBean(SocketClient.class);
         socketClient.sendRequest(request);
@@ -31,8 +37,13 @@ public class DirectHandler implements RequestHandler {
     @Override
     public String calculatingUrl(SocketContext socketContext) {
         String url = socketContext.getUrl();
-        if (!url.startsWith(HhhConst.HTTP_PREFIX)) {
-            url = HhhConst.HTTP_PREFIX + url;
+        if (!url.startsWith(HhhConst.HTTP_PREFIX) && !url.startsWith(HhhConst.HTTPS_PREFIX)) {
+            if (enableHttps) {
+                url = HhhConst.HTTPS_PREFIX + url;
+            } else {
+                url = HhhConst.HTTP_PREFIX + url;
+            }
+
         }
         if (!url.endsWith("/")) {
             url += "/";
@@ -45,6 +56,7 @@ public class DirectHandler implements RequestHandler {
                     uri = uri.replaceFirst("/", "");
                 }
                 url += uri;
+                socketContext.setUseSocketAdapter(socketAdapter);
                 break;
             }
         }

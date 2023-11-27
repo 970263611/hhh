@@ -6,5 +6,5 @@ package com.dahuaboke.hhh;
  */
 public interface RequestFactory {
 
-    Request createRequest(String url, String contentType, String param);
+    Request createRequest(SocketContext socketContext);
 }

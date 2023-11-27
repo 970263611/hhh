@@ -6,7 +6,7 @@ package com.dahuaboke.hhh;
  */
 public class Request {
 
-    private Object requestParam;
+    private Object request;
     private Callback callback;
 
     public Request() {
@@ -16,16 +16,16 @@ public class Request {
         this.callback = callback;
     }
 
-    public Request(Object requestParam) {
-        this.requestParam = requestParam;
+    public Request(Object request) {
+        this.request = request;
     }
 
-    public Object getRequestParam() {
-        return requestParam;
+    public Object getRequest() {
+        return request;
     }
 
-    public void setRequestParam(Object requestParam) {
-        this.requestParam = requestParam;
+    public void setRequest(Object request) {
+        this.request = request;
     }
 
     public Callback getCallback() {

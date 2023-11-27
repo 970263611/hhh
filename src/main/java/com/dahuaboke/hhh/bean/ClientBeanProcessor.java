@@ -1,5 +1,6 @@
 package com.dahuaboke.hhh.bean;
 
+import com.dahuaboke.hhh.HhhConfig;
 import com.dahuaboke.hhh.SocketContext;
 import com.dahuaboke.hhh.annotation.Hhh;
 import com.dahuaboke.hhh.consts.HhhConst;
@@ -62,20 +63,22 @@ public class ClientBeanProcessor implements ImportBeanDefinitionRegistrar, Envir
                 AnnotationMetadata annotationMetadata = beanDefinition.getMetadata();
                 Assert.isTrue(annotationMetadata.isInterface(), "@HhhClient can only be specified on an interface");
                 Map<String, Object> attributes = annotationMetadata.getAnnotationAttributes(Hhh.class.getCanonicalName());
-                registerFeignClient(registry, annotationMetadata, attributes);
+                registerHhhClient(registry, annotationMetadata, attributes);
             }
         }
     }
 
-    private void registerFeignClient(BeanDefinitionRegistry registry,
-                                     AnnotationMetadata annotationMetadata, Map<String, Object> attributes) {
+    private void registerHhhClient(BeanDefinitionRegistry registry,
+                                   AnnotationMetadata annotationMetadata, Map<String, Object> attributes) {
         String className = annotationMetadata.getClassName();
         Class clazz = ClassUtils.resolveClassName(className, null);
         String name = (String) attributes.get("name");
         String url = (String) attributes.get("url");
         String contentType = (String) attributes.get("contentType");
-        SocketContext hhhClientModel = new SocketContext(name, url, contentType, clazz);
-        HhhFactoryBean hhhFactoryBean = new HhhFactoryBean(hhhClientModel);
+        String enableHttpsStr = environment.getProperty(HhhConst.ENABLE_HTTPS);
+        boolean enableHttps = Boolean.parseBoolean(enableHttpsStr);
+        HhhConfig hhhConfig = new HhhConfig(name, url, contentType, clazz, enableHttps);
+        HhhFactoryBean hhhFactoryBean = new HhhFactoryBean(hhhConfig);
         BeanDefinitionBuilder definition = BeanDefinitionBuilder.genericBeanDefinition(clazz, (Supplier) () -> hhhFactoryBean.getObject());
         definition.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE);
         definition.setLazyInit(true);

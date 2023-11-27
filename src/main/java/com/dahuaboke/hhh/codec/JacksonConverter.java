@@ -1,7 +1,6 @@
-package com.dahuaboke.hhh.codec.jackson;
+package com.dahuaboke.hhh.codec;
 
-import com.dahuaboke.hhh.codec.EncoderAndDecoder;
-import com.dahuaboke.hhh.exception.EncodeOrDecodeException;
+import com.dahuaboke.hhh.exception.CodecException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,7 +16,7 @@ import java.lang.reflect.Type;
  * author: dahua
  * date: 2023/11/24 14:46
  */
-public class JacksonEncoderAndDecoder implements EncoderAndDecoder {
+public class JacksonConverter implements CodecConverter {
 
     private static class singleJson {
         private static final ObjectMapper INSTANCE = new ObjectMapper();
@@ -28,7 +27,7 @@ public class JacksonEncoderAndDecoder implements EncoderAndDecoder {
         try {
             return INSTANCE().writeValueAsString(objs);
         } catch (JsonProcessingException e) {
-            throw new EncodeOrDecodeException();
+            throw new CodecException();
         }
     }
 
@@ -39,8 +38,18 @@ public class JacksonEncoderAndDecoder implements EncoderAndDecoder {
         try {
             return INSTANCE().readValue(inputStream, javaType);
         } catch (IOException e) {
-            throw new EncodeOrDecodeException();
+            throw new CodecException(e);
         }
+    }
+
+    @Override
+    public boolean canEncode() {
+        return true;
+    }
+
+    @Override
+    public boolean canDecode() {
+        return false;
     }
 
     public ObjectMapper INSTANCE() {

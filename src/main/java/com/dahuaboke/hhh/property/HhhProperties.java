@@ -13,6 +13,7 @@ public class HhhProperties {
     private int requestTimeout;
     private int socketConnectTimeout;
     private int socketReadTimeout;
+    private boolean enableHttps;
 
     public int getRequestTimeout() {
         return requestTimeout == 0 ? HhhConst.DEFAULT_REQUEST_TIMEOUT : requestTimeout;
@@ -36,5 +37,13 @@ public class HhhProperties {
 
     public void setSocketReadTimeout(int socketReadTimeout) {
         this.socketReadTimeout = socketReadTimeout;
+    }
+
+    public boolean isEnableHttps() {
+        return enableHttps;
+    }
+
+    public void setEnableHttps(boolean enableHttps) {
+        this.enableHttps = enableHttps;
     }
 }

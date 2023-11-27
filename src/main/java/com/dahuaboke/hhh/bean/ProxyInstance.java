@@ -1,7 +1,7 @@
 package com.dahuaboke.hhh.bean;
 
-import com.dahuaboke.hhh.SocketContext;
-import com.dahuaboke.hhh.codec.EncoderAndDecoder;
+import com.dahuaboke.hhh.HhhConfig;
+import com.dahuaboke.hhh.codec.CodecConverter;
 import com.dahuaboke.hhh.exception.RequestException;
 import com.dahuaboke.hhh.exception.RequestTimeoutException;
 import com.dahuaboke.hhh.property.HhhProperties;
@@ -21,10 +21,10 @@ import java.util.concurrent.TimeoutException;
  */
 public class ProxyInstance implements InvocationHandler {
 
-    private SocketContext socketContext;
+    private HhhConfig hhhConfig;
 
-    public ProxyInstance(SocketContext socketContext) {
-        this.socketContext = socketContext;
+    public ProxyInstance(HhhConfig hhhConfig) {
+        this.hhhConfig = hhhConfig;
     }
 
     @Override
@@ -33,9 +33,8 @@ public class ProxyInstance implements InvocationHandler {
         CompletableFuture completableFuture = new CompletableFuture();
         HhhProperties hhhProperties = SpringUtils.getBean(HhhProperties.class);
         int requestTimeout = hhhProperties.getRequestTimeout();
-        EncoderAndDecoder encoderAndDecoder = SpringUtils.getBean(EncoderAndDecoder.class);
-        String param = encoderAndDecoder.encode(args);
-        socketContext.setParam(param);
+        CodecConverter codecConverter = SpringUtils.getBean(CodecConverter.class);
+        socketContext.setParams(args);
         com.dahuaboke.hhh.Callback callback = new com.dahuaboke.hhh.Callback() {
             @Override
             public void onSuccess(InputStream is) {
@@ -51,12 +50,13 @@ public class ProxyInstance implements InvocationHandler {
         socketContext.setMethod(method);
         socketContext.getRequestHandler().handler(socketContext);
         long nowTime = System.currentTimeMillis();
-        long lastTime = nowTime - beginTime;
-        if (lastTime >= requestTimeout) {
+        long userTime = nowTime - beginTime;
+        if (userTime >= requestTimeout) {
             throw new RequestTimeoutException();
         }
         Object res;
         try {
+            long lastTime = requestTimeout - userTime;
             res = completableFuture.get(lastTime, TimeUnit.MILLISECONDS);
         } catch (TimeoutException e) {
             throw new RequestTimeoutException(e);
@@ -68,6 +68,6 @@ public class ProxyInstance implements InvocationHandler {
         }
         InputStream is = (InputStream) res;
         Type type = method.getGenericReturnType();
-        return encoderAndDecoder.decode(is, type, socketContext.getClazz());
+        return codecConverter.decode(is, type, socketContext.getClazz());
     }
 }

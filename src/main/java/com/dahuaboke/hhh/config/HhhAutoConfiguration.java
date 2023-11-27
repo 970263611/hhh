@@ -3,8 +3,8 @@ package com.dahuaboke.hhh.config;
 import com.dahuaboke.hhh.RequestFactory;
 import com.dahuaboke.hhh.SocketClient;
 import com.dahuaboke.hhh.bean.ClientBeanProcessor;
-import com.dahuaboke.hhh.codec.EncoderAndDecoder;
-import com.dahuaboke.hhh.codec.jackson.JacksonEncoderAndDecoder;
+import com.dahuaboke.hhh.codec.CodecConverter;
+import com.dahuaboke.hhh.codec.JacksonConverter;
 import com.dahuaboke.hhh.http.okhttp.OkHttpClient;
 import com.dahuaboke.hhh.http.okhttp.OkHttpRequestFactory;
 import com.dahuaboke.hhh.property.HhhProperties;
@@ -26,9 +26,9 @@ import org.springframework.context.annotation.Import;
 public class HhhAutoConfiguration {
 
     @Bean
-    @ConditionalOnMissingBean(EncoderAndDecoder.class)
-    public EncoderAndDecoder encoderAndDecoder() {
-        return new JacksonEncoderAndDecoder();
+    @ConditionalOnMissingBean(CodecConverter.class)
+    public CodecConverter encoderAndDecoder() {
+        return new JacksonConverter();
     }
 
     @Bean

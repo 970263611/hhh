@@ -1,9 +1,12 @@
 package com.dahuaboke.hhh.http.okhttp;
 
 import com.dahuaboke.hhh.Request;
+import com.dahuaboke.hhh.SocketContext;
+import com.dahuaboke.hhh.adapter.SocketAdapter;
+import com.dahuaboke.hhh.adapter.http.HttpAdapter;
+import com.dahuaboke.hhh.http.HttpBuilder;
 import com.dahuaboke.hhh.http.HttpRequestFactory;
-import okhttp3.MediaType;
-import okhttp3.RequestBody;
+import com.dahuaboke.hhh.utils.SpringUtils;
 
 /**
  * author: dahua
@@ -12,11 +15,14 @@ import okhttp3.RequestBody;
 public class OkHttpRequestFactory extends HttpRequestFactory {
 
     @Override
-    public Request createRequest(String url, String contentType, String param) {
-        MediaType mediaType = MediaType.get(contentType);
-        RequestBody requestBody = RequestBody.create(param, mediaType);
-        okhttp3.Request.Builder builder = new okhttp3.Request.Builder();
-        okhttp3.Request request = builder.post(requestBody).url(url).build();
-        return new Request(request);
+    public Request createHttpRequest(SocketContext socketContext) {
+        SocketAdapter useSocketAdapter = socketContext.getUseSocketAdapter();
+        if (useSocketAdapter == null) {
+            throw new IllegalArgumentException("can not find match adapter");
+        }
+        HttpAdapter httpAdapter = (HttpAdapter) useSocketAdapter;
+        Class<? extends HttpBuilder> aClass = httpAdapter.matchHttpBuilder();
+        HttpBuilder httpBuilder = SpringUtils.getBean(aClass);
+        return httpBuilder.build(socketContext);
     }
 }

@@ -1,6 +1,8 @@
 package com.dahuaboke.hhh.adapter.http;
 
 import com.dahuaboke.hhh.enums.HttpMethod;
+import com.dahuaboke.hhh.http.HttpBuilder;
+import com.dahuaboke.hhh.http.HttpPostBuilder;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,5 +30,10 @@ public class HttpPostMethodAdapter extends AbstractHttpMethodAdapter {
     @Override
     public Class matchSpringMvcClass() {
         return PostMapping.class;
+    }
+
+    @Override
+    public Class<? extends HttpBuilder> matchHttpBuilder() {
+        return HttpPostBuilder.class;
     }
 }
