@@ -43,12 +43,11 @@ public class DirectHandler implements RequestHandler {
             } else {
                 url = HhhConst.HTTP_PREFIX + url;
             }
-
         }
         if (!url.endsWith("/")) {
             url += "/";
         }
-        for (SocketAdapter socketAdapter : SocketContext.getSocketAdapters()) {
+        for (SocketAdapter socketAdapter : socketContext.getSocketAdapters()) {
             Method method = socketContext.getMethod();
             if (socketAdapter.match(method)) {
                 String uri = socketAdapter.getUri(method);

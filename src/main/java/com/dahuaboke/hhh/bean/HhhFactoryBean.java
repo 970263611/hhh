@@ -1,11 +1,9 @@
 package com.dahuaboke.hhh.bean;
 
 import com.dahuaboke.hhh.HhhConfig;
-import com.dahuaboke.hhh.SocketContext;
 import com.dahuaboke.hhh.handler.DirectHandler;
 import com.dahuaboke.hhh.handler.LoadBalancerHandler;
 import com.dahuaboke.hhh.handler.RequestHandler;
-import com.dahuaboke.hhh.property.HhhProperties;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
@@ -43,7 +41,7 @@ public class HhhFactoryBean implements FactoryBean {
 
     @Override
     public Class<?> getObjectType() {
-        return socketContext.getClazz();
+        return hhhConfig.getClazz();
     }
 
     @Override

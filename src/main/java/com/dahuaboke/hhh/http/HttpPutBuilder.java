@@ -2,8 +2,6 @@ package com.dahuaboke.hhh.http;
 
 import com.dahuaboke.hhh.Request;
 import com.dahuaboke.hhh.SocketContext;
-import com.dahuaboke.hhh.codec.CodecConverter;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Map;
 
@@ -11,20 +9,16 @@ import java.util.Map;
  * author: dahua
  * date: 2023/11/27 16:40
  */
-public abstract class HttpPutBuilder implements HttpBuilder {
-
-    @Autowired
-    private CodecConverter codecConverter;
+public abstract class HttpPutBuilder extends AbstractHttpBuilder {
 
     @Override
-    public Request build(SocketContext socketContext) {
+    protected Request buildHttp(SocketContext socketContext) {
         String url = socketContext.getUrl();
-        String contentType = socketContext.getContentType();
-        Object[] params = socketContext.getParams();
-        String param = codecConverter.encode(params);
         Map<String, String> headers = socketContext.getHeaders();
-        return buildPutRequest(url, headers, param, contentType);
+        String body = socketContext.getBody();
+        String contentType = socketContext.getContentType();
+        return buildPutRequest(url, headers, body, contentType);
     }
 
-    protected abstract Request buildPutRequest(String url, Map<String, String> headers, String param, String contentType);
+    protected abstract Request buildPutRequest(String url, Map<String, String> headers, String body, String contentType);
 }

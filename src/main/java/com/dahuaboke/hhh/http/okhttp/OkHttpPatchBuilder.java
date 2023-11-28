@@ -16,15 +16,15 @@ import java.util.Map;
 public class OkHttpPatchBuilder extends HttpPatchBuilder {
 
     @Override
-    public Request buildPatchRequest(String url, Map<String, String> headers, String param, String contentType) {
+    public Request buildPatchRequest(String url, Map<String, String> headers, String body, String contentType) {
         MediaType mediaType = MediaType.get(contentType);
-        RequestBody requestBody = RequestBody.create(param, mediaType);
         okhttp3.Request.Builder builder = new okhttp3.Request.Builder();
         if (headers != null) {
             headers.forEach((k, v) -> {
                 builder.addHeader(k, v);
             });
         }
+        RequestBody requestBody = RequestBody.create(body, mediaType);
         okhttp3.Request request = builder.patch(requestBody).url(url).build();
         return new Request(request);
     }

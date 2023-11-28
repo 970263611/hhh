@@ -14,14 +14,14 @@ import java.util.Map;
 public class OkHttpGetBuilder extends HttpGetBuilder {
 
     @Override
-    public Request buildGetRequest(String url, Map<String, String> headers, String param) {
+    public Request buildGetRequest(String url, Map<String, String> headers) {
         okhttp3.Request.Builder builder = new okhttp3.Request.Builder();
         if (headers != null) {
             headers.forEach((k, v) -> {
                 builder.addHeader(k, v);
             });
         }
-        okhttp3.Request request = builder.get().url(url + param).build();
+        okhttp3.Request request = builder.get().url(url).build();
         return new Request(request);
     }
 }

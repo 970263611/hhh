@@ -11,7 +11,7 @@ import java.lang.reflect.Type;
  */
 public interface CodecConverter {
 
-    String encode(Object... objs);
+    String encode(Object obj);
 
     Object decode(InputStream inputStream, Type type, @Nullable Class<?> clazz);
 

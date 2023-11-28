@@ -6,6 +6,7 @@ import com.dahuaboke.hhh.http.HttpGetBuilder;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.lang.reflect.Method;
 
@@ -23,8 +24,12 @@ public class HttpGetMethodAdapter extends AbstractHttpMethodAdapter {
 
     @Override
     public String getUri(Method method) {
-        GetMapping annotation = AnnotationUtils.findAnnotation(method, GetMapping.class);
-        return annotation.value()[0];
+        GetMapping getMapping = AnnotationUtils.findAnnotation(method, GetMapping.class);
+        if (getMapping == null) {
+            RequestMapping requestMapping = AnnotationUtils.getAnnotation(method, RequestMapping.class);
+            return requestMapping.value()[0];
+        }
+        return getMapping.value()[0];
     }
 
     @Override

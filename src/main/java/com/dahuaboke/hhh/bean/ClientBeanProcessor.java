@@ -61,7 +61,7 @@ public class ClientBeanProcessor implements ImportBeanDefinitionRegistrar, Envir
             if (candidateComponent instanceof AnnotatedBeanDefinition) {
                 AnnotatedBeanDefinition beanDefinition = (AnnotatedBeanDefinition) candidateComponent;
                 AnnotationMetadata annotationMetadata = beanDefinition.getMetadata();
-                Assert.isTrue(annotationMetadata.isInterface(), "@HhhClient can only be specified on an interface");
+                Assert.isTrue(annotationMetadata.isInterface(), "@Hhh can only be specified on an interface");
                 Map<String, Object> attributes = annotationMetadata.getAnnotationAttributes(Hhh.class.getCanonicalName());
                 registerHhhClient(registry, annotationMetadata, attributes);
             }

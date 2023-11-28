@@ -4,7 +4,6 @@ import com.dahuaboke.hhh.adapter.SocketAdapter;
 import com.dahuaboke.hhh.handler.RequestHandler;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,23 +21,21 @@ public class SocketContext {
     private RequestHandler requestHandler;
     private Callback callback;
     private Method method;
-    private static final List<SocketAdapter> socketAdapters = new ArrayList();
+    private List<SocketAdapter> socketAdapters;
     private volatile SocketAdapter useSocketAdapter;
     private boolean enableHttps;
-
-    private String uri;
     private Object[] params;
     private Map<String, String> headers = new LinkedHashMap();
+    private String body = new String();
 
-    public SocketContext() {
-    }
-
-    public SocketContext(String name, String url, String contentType, Class clazz, boolean enableHttps) {
-        this.name = name;
-        this.url = url;
-        this.contentType = contentType;
-        this.clazz = clazz;
-        this.enableHttps = enableHttps;
+    public SocketContext(HhhConfig hhhConfig) {
+        this.name = hhhConfig.getName();
+        this.url = hhhConfig.getUrl();
+        this.clazz = hhhConfig.getClazz();
+        this.contentType = hhhConfig.getContentType();
+        this.enableHttps = hhhConfig.isEnableHttps();
+        this.requestHandler = hhhConfig.getRequestHandler();
+        this.socketAdapters = HhhConfig.getSocketAdapters();
     }
 
     public String getName() {
@@ -105,14 +102,6 @@ public class SocketContext {
         this.method = method;
     }
 
-    public static List<SocketAdapter> getSocketAdapters() {
-        return socketAdapters;
-    }
-
-    public static void setSocketAdapter(SocketAdapter socketAdapter) {
-        socketAdapters.add(socketAdapter);
-    }
-
     public SocketAdapter getUseSocketAdapter() {
         return useSocketAdapter;
     }
@@ -141,11 +130,15 @@ public class SocketContext {
         this.enableHttps = enableHttps;
     }
 
-    public String getUri() {
-        return uri;
+    public List<SocketAdapter> getSocketAdapters() {
+        return socketAdapters;
     }
 
-    public void setUri(String uri) {
-        this.uri = uri;
+    public String getBody() {
+        return body;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
     }
 }

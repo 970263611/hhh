@@ -1,6 +1,10 @@
 package com.dahuaboke.hhh;
 
+import com.dahuaboke.hhh.adapter.SocketAdapter;
 import com.dahuaboke.hhh.handler.RequestHandler;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * author: dahua
@@ -14,6 +18,7 @@ public class HhhConfig {
     private Class clazz;
     private boolean enableHttps;
     private RequestHandler requestHandler;
+    private static final List<SocketAdapter> socketAdapters = new ArrayList();
 
     public HhhConfig(String name, String url, String contentType, Class clazz, boolean enableHttps) {
         this.name = name;
@@ -69,5 +74,13 @@ public class HhhConfig {
 
     public void setRequestHandler(RequestHandler requestHandler) {
         this.requestHandler = requestHandler;
+    }
+
+    public static List<SocketAdapter> getSocketAdapters() {
+        return socketAdapters;
+    }
+
+    public static void setSocketAdapter(SocketAdapter socketAdapter) {
+        socketAdapters.add(socketAdapter);
     }
 }

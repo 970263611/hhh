@@ -23,9 +23,9 @@ public class JacksonConverter implements CodecConverter {
     }
 
     @Override
-    public String encode(Object... objs) {
+    public String encode(Object obj) {
         try {
-            return INSTANCE().writeValueAsString(objs);
+            return INSTANCE().writeValueAsString(obj);
         } catch (JsonProcessingException e) {
             throw new CodecException();
         }

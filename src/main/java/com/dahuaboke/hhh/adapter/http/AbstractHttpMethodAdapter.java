@@ -1,5 +1,6 @@
 package com.dahuaboke.hhh.adapter.http;
 
+import com.dahuaboke.hhh.HhhConfig;
 import com.dahuaboke.hhh.SocketContext;
 import com.dahuaboke.hhh.enums.HttpMethod;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -24,7 +25,7 @@ public abstract class AbstractHttpMethodAdapter implements HttpMethodAdapter {
     }
 
     public void register() {
-        SocketContext.setSocketAdapter(this);
+        HhhConfig.setSocketAdapter(this);
         httpMethodAnnotationClasses.put(matchSpringMvcClass(), matchHttpMethod());
     }
 

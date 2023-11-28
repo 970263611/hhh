@@ -2,6 +2,7 @@ package com.dahuaboke.hhh.http.okhttp;
 
 import com.dahuaboke.hhh.Request;
 import com.dahuaboke.hhh.exception.ClientTypeErrorException;
+import com.dahuaboke.hhh.exception.RequestException;
 import com.dahuaboke.hhh.http.HttpClient;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -42,7 +43,11 @@ public class OkHttpClient extends HttpClient {
 
                 @Override
                 public void onResponse(@NotNull Call call, @NotNull Response response) {
-                    request.getCallback().onSuccess(response.body().byteStream());
+                    if (response.code() != 200) {
+                        request.getCallback().onFailure(new RequestException(response.toString()));
+                    } else {
+                        request.getCallback().onSuccess(response.body().byteStream());
+                    }
                 }
             });
         } else {

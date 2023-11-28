@@ -1,6 +1,7 @@
 package com.dahuaboke.hhh.bean;
 
 import com.dahuaboke.hhh.HhhConfig;
+import com.dahuaboke.hhh.SocketContext;
 import com.dahuaboke.hhh.codec.CodecConverter;
 import com.dahuaboke.hhh.exception.RequestException;
 import com.dahuaboke.hhh.exception.RequestTimeoutException;
@@ -30,6 +31,7 @@ public class ProxyInstance implements InvocationHandler {
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) {
         long beginTime = System.currentTimeMillis();
+        SocketContext socketContext = new SocketContext(hhhConfig);
         CompletableFuture completableFuture = new CompletableFuture();
         HhhProperties hhhProperties = SpringUtils.getBean(HhhProperties.class);
         int requestTimeout = hhhProperties.getRequestTimeout();
