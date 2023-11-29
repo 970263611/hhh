@@ -36,7 +36,6 @@ public class SocketContext {
         this.enableHttps = hhhConfig.isEnableHttps();
         this.requestHandler = hhhConfig.getRequestHandler();
         this.socketAdapters = HhhConfig.getSocketAdapters();
-        this.useSocketAdapter = hhhConfig.getUseSocketAdapter();
     }
 
     public String getName() {
