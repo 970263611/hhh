@@ -32,7 +32,7 @@ public class HhhFactoryBean implements FactoryBean {
             Assert.isNull(key, "param name and url can not all empty");
             requestHandler = new LoadBalancerHandler();
         } else {
-            requestHandler = new DirectHandler(hhhConfig.isEnableHttps());
+            requestHandler = new DirectHandler();
         }
         Class clazz = hhhConfig.getClazz();
         hhhConfig.setRequestHandler(requestHandler);

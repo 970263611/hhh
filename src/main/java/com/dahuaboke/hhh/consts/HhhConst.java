@@ -14,4 +14,5 @@ public class HhhConst {
     public static final int DEFAULT_SOCKET_READ_TIMEOUT = 3000;
     public static final String HTTP_PREFIX = "http://";
     public static final String HTTPS_PREFIX = "https://";
+    public static final String NACOS_ADDR = "spring.cloud.nacos.discovery.server‐addr";
 }

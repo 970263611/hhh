@@ -7,6 +7,8 @@ import com.dahuaboke.hhh.codec.CodecConverter;
 import com.dahuaboke.hhh.codec.JacksonConverter;
 import com.dahuaboke.hhh.http.okhttp.OkHttpClient;
 import com.dahuaboke.hhh.http.okhttp.OkHttpRequestFactory;
+import com.dahuaboke.hhh.loadbalance.LoadBalancer;
+import com.dahuaboke.hhh.loadbalance.nacos.NacosLoadBalancer;
 import com.dahuaboke.hhh.property.HhhProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -41,5 +43,11 @@ public class HhhAutoConfiguration {
     @ConditionalOnMissingBean(RequestFactory.class)
     public RequestFactory httpRequestFactory() {
         return new OkHttpRequestFactory();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(LoadBalancer.class)
+    public LoadBalancer loadBalancer() {
+        return new NacosLoadBalancer();
     }
 }
