@@ -37,29 +37,24 @@ public abstract class AbstractHandler implements RequestHandler {
             } else {
                 url = HhhConst.HTTP_PREFIX + url;
             }
+
         }
         if (!url.endsWith("/")) {
             url += "/";
         }
-        SocketAdapter socketAdapter = socketContext.getUseSocketAdapter();
-        if (socketContext.getUseSocketAdapter() == null) {
-            for (SocketAdapter adapter : socketContext.getSocketAdapters()) {
-                socketAdapter = adapter;
+        for (SocketAdapter socketAdapter : socketContext.getSocketAdapters()) {
+            Method method = socketContext.getMethod();
+            if (socketAdapter.match(method)) {
+                String uri = socketAdapter.getUri(method);
+                if (uri.startsWith("/")) {
+                    uri = uri.replaceFirst("/", "");
+                }
+                url += uri;
+                socketContext.setUseSocketAdapter(socketAdapter);
                 break;
             }
         }
-        Method method = socketContext.getMethod();
-        if (socketAdapter.match(method)) {
-            String uri = socketAdapter.getUri(method);
-            if (uri.startsWith("/")) {
-                uri = uri.replaceFirst("/", "");
-            }
-            url += uri;
-            socketContext.setUseSocketAdapter(socketAdapter);
-            socketContext.getHhhConfig().setUseSocketAdapter(socketAdapter);
-            return url;
-        }
-        throw new IllegalArgumentException("can not find match adapter");
+        return url;
     }
 
     protected abstract String getUrl(SocketContext socketContext);

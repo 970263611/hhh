@@ -27,7 +27,6 @@ public class SocketContext {
     private Object[] params;
     private Map<String, String> headers = new LinkedHashMap();
     private String body = new String();
-    private HhhConfig hhhConfig;
 
     public SocketContext(HhhConfig hhhConfig) {
         this.name = hhhConfig.getName();
@@ -38,7 +37,6 @@ public class SocketContext {
         this.requestHandler = hhhConfig.getRequestHandler();
         this.socketAdapters = HhhConfig.getSocketAdapters();
         this.useSocketAdapter = hhhConfig.getUseSocketAdapter();
-        this.hhhConfig = hhhConfig;
     }
 
     public String getName() {
@@ -143,9 +141,5 @@ public class SocketContext {
 
     public void setBody(String body) {
         this.body = body;
-    }
-
-    public HhhConfig getHhhConfig() {
-        return hhhConfig;
     }
 }

@@ -18,7 +18,6 @@ public class HhhConfig {
     private Class clazz;
     private boolean enableHttps;
     private RequestHandler requestHandler;
-    private volatile SocketAdapter useSocketAdapter;
     private static final List<SocketAdapter> socketAdapters = new ArrayList();
 
     public HhhConfig(String name, String url, String contentType, Class clazz, boolean enableHttps) {
@@ -83,13 +82,5 @@ public class HhhConfig {
 
     public static void setSocketAdapter(SocketAdapter socketAdapter) {
         socketAdapters.add(socketAdapter);
-    }
-
-    public SocketAdapter getUseSocketAdapter() {
-        return useSocketAdapter;
-    }
-
-    public void setUseSocketAdapter(SocketAdapter useSocketAdapter) {
-        this.useSocketAdapter = useSocketAdapter;
     }
 }
