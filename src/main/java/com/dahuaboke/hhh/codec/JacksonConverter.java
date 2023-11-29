@@ -8,9 +8,9 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 import org.springframework.core.GenericTypeResolver;
 import org.springframework.lang.Nullable;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.lang.reflect.Type;
+import java.util.stream.Collectors;
 
 /**
  * author: dahua
@@ -33,6 +33,15 @@ public class JacksonConverter implements CodecConverter {
 
     @Override
     public Object decode(InputStream inputStream, Type type, @Nullable Class<?> contextClass) {
+        if (type.getTypeName().equals(String.class.getTypeName())) {
+            try {
+                return new BufferedReader(new InputStreamReader(inputStream, "utf-8"))
+                        .lines().collect(Collectors.joining(System.lineSeparator()));
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
         TypeFactory typeFactory = INSTANCE().getTypeFactory();
         JavaType javaType = typeFactory.constructType(GenericTypeResolver.resolveType(type, contextClass));
         try {
