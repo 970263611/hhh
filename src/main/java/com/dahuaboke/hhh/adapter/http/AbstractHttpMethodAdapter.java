@@ -1,14 +1,13 @@
 package com.dahuaboke.hhh.adapter.http;
 
-import com.dahuaboke.hhh.HhhConfig;
-import com.dahuaboke.hhh.SocketContext;
-import com.dahuaboke.hhh.enums.HttpMethod;
+import com.dahuaboke.hhh.enums.HttpSocketMethod;
+import com.dahuaboke.hhh.enums.SocketMethod;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.AnnotationUtils;
 
 import javax.annotation.PostConstruct;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -17,7 +16,8 @@ import java.util.Map;
  */
 public abstract class AbstractHttpMethodAdapter implements HttpMethodAdapter {
 
-    private static Map<Class, HttpMethod> httpMethodAnnotationClasses = new HashMap();
+    @Autowired
+    private HttpAdapterChain httpAdapterChain;
 
     @PostConstruct
     public void init() {
@@ -25,25 +25,25 @@ public abstract class AbstractHttpMethodAdapter implements HttpMethodAdapter {
     }
 
     public void register() {
-        HhhConfig.setSocketAdapter(this);
-        httpMethodAnnotationClasses.put(matchSpringMvcClass(), matchHttpMethod());
+        httpAdapterChain.addMethodConvert(matchSpringMvcClass(), matchHttpMethod());
+        httpAdapterChain.addAdapter(this);
     }
 
     @Override
     public boolean match(Method method) {
-        HttpMethod httpMethod = findHttpMethod(method);
+        HttpSocketMethod httpMethod = findHttpMethod(method);
         return matchHttpMethod().equals(httpMethod);
     }
 
-    public HttpMethod findHttpMethod(Method method) {
-        for (Map.Entry<Class, HttpMethod> entry : httpMethodAnnotationClasses.entrySet()) {
+    public HttpSocketMethod findHttpMethod(Method method) {
+        for (Map.Entry<Class, SocketMethod> entry : httpAdapterChain.getMethodConvert().entrySet()) {
             Annotation annotation = AnnotationUtils.findAnnotation(method, entry.getKey());
             if (annotation != null) {
-                return entry.getValue();
+                return (HttpSocketMethod) entry.getValue();
             }
         }
-        return HttpMethod.GET;
+        return HttpSocketMethod.GET;
     }
 
-    abstract HttpMethod matchHttpMethod();
+    abstract HttpSocketMethod matchHttpMethod();
 }

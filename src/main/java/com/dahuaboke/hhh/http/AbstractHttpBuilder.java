@@ -28,6 +28,8 @@ public abstract class AbstractHttpBuilder implements HttpBuilder {
 
     @Autowired
     protected CodecConverter codecConverter;
+    @Autowired
+    protected HookChain hookChain;
 
     @Override
     public Request build(SocketContext socketContext) {
@@ -37,8 +39,8 @@ public abstract class AbstractHttpBuilder implements HttpBuilder {
     }
 
     private void aroundBuild(SocketContext socketContext) {
-        List<Hook> hookChain = HookChain.getHookChain();
-        for (Hook hook : hookChain) {
+        List<Hook> hooks = hookChain.getHookChain();
+        for (Hook hook : hooks) {
             hook.beforeSendRequest(socketContext);
         }
     }

@@ -14,8 +14,4 @@ public interface CodecConverter {
     String encode(Object obj);
 
     Object decode(InputStream inputStream, Type type, @Nullable Class<?> clazz);
-
-    boolean canEncode();
-
-    boolean canDecode();
 }

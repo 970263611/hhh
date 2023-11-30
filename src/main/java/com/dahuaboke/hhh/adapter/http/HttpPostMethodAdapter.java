@@ -1,6 +1,6 @@
 package com.dahuaboke.hhh.adapter.http;
 
-import com.dahuaboke.hhh.enums.HttpMethod;
+import com.dahuaboke.hhh.enums.HttpSocketMethod;
 import com.dahuaboke.hhh.http.HttpBuilder;
 import com.dahuaboke.hhh.http.HttpPostBuilder;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -17,8 +17,8 @@ import java.lang.reflect.Method;
 public class HttpPostMethodAdapter extends AbstractHttpMethodAdapter {
 
     @Override
-    HttpMethod matchHttpMethod() {
-        return HttpMethod.POST;
+    HttpSocketMethod matchHttpMethod() {
+        return HttpSocketMethod.POST;
     }
 
     @Override

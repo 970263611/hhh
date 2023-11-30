@@ -5,7 +5,6 @@ import com.dahuaboke.hhh.handler.RequestHandler;
 
 import java.lang.reflect.Method;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -21,7 +20,6 @@ public class SocketContext {
     private RequestHandler requestHandler;
     private Callback callback;
     private Method method;
-    private List<SocketAdapter> socketAdapters;
     private volatile SocketAdapter useSocketAdapter;
     private boolean enableHttps;
     private Object[] params;
@@ -35,7 +33,6 @@ public class SocketContext {
         this.contentType = hhhConfig.getContentType();
         this.enableHttps = hhhConfig.isEnableHttps();
         this.requestHandler = hhhConfig.getRequestHandler();
-        this.socketAdapters = HhhConfig.getSocketAdapters();
     }
 
     public String getName() {
@@ -128,10 +125,6 @@ public class SocketContext {
 
     public void setEnableHttps(boolean enableHttps) {
         this.enableHttps = enableHttps;
-    }
-
-    public List<SocketAdapter> getSocketAdapters() {
-        return socketAdapters;
     }
 
     public String getBody() {

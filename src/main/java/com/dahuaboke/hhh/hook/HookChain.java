@@ -1,5 +1,7 @@
 package com.dahuaboke.hhh.hook;
 
+import org.springframework.stereotype.Component;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,15 +9,16 @@ import java.util.List;
  * author: dahua
  * date: 2023/11/27 17:38
  */
+@Component
 public class HookChain {
 
-    private static List<Hook> hooks = new ArrayList();
+    private List<Hook> hooks = new ArrayList();
 
-    public static void setHook(Hook hook) {
+    public void setHook(Hook hook) {
         hooks.add(hook);
     }
 
-    public static List<Hook> getHookChain() {
+    public List<Hook> getHookChain() {
         return hooks;
     }
 }

@@ -1,6 +1,6 @@
 package com.dahuaboke.hhh.adapter.http;
 
-import com.dahuaboke.hhh.enums.HttpMethod;
+import com.dahuaboke.hhh.enums.HttpSocketMethod;
 import com.dahuaboke.hhh.http.HttpBuilder;
 import com.dahuaboke.hhh.http.HttpDeleteBuilder;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -17,8 +17,8 @@ import java.lang.reflect.Method;
 public class HttpDeleteMethodAdapter extends AbstractHttpMethodAdapter {
 
     @Override
-    HttpMethod matchHttpMethod() {
-        return HttpMethod.DELETE;
+    HttpSocketMethod matchHttpMethod() {
+        return HttpSocketMethod.DELETE;
     }
 
     @Override

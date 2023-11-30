@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
  * author: dahua
  * date: 2023/11/24 14:46
  */
-public class JacksonConverter implements CodecConverter {
+public class DefaultConverter implements CodecConverter {
 
     private static class singleJson {
         private static final ObjectMapper INSTANCE = new ObjectMapper();
@@ -49,16 +49,6 @@ public class JacksonConverter implements CodecConverter {
         } catch (IOException e) {
             throw new CodecException(e);
         }
-    }
-
-    @Override
-    public boolean canEncode() {
-        return true;
-    }
-
-    @Override
-    public boolean canDecode() {
-        return false;
     }
 
     public ObjectMapper INSTANCE() {

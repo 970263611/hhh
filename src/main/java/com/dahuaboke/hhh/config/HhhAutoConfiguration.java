@@ -4,12 +4,13 @@ import com.dahuaboke.hhh.RequestFactory;
 import com.dahuaboke.hhh.SocketClient;
 import com.dahuaboke.hhh.bean.ClientBeanProcessor;
 import com.dahuaboke.hhh.codec.CodecConverter;
-import com.dahuaboke.hhh.codec.JacksonConverter;
+import com.dahuaboke.hhh.codec.DefaultConverter;
 import com.dahuaboke.hhh.http.okhttp.OkHttpClient;
 import com.dahuaboke.hhh.http.okhttp.OkHttpRequestFactory;
 import com.dahuaboke.hhh.loadbalance.LoadBalancer;
 import com.dahuaboke.hhh.loadbalance.nacos.NacosLoadBalancer;
 import com.dahuaboke.hhh.property.HhhProperties;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -30,7 +31,7 @@ public class HhhAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(CodecConverter.class)
     public CodecConverter encoderAndDecoder() {
-        return new JacksonConverter();
+        return new DefaultConverter();
     }
 
     @Bean
@@ -47,6 +48,7 @@ public class HhhAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(LoadBalancer.class)
+    @ConditionalOnClass(name = "com.alibaba.nacos.api.naming.NamingFactory")
     public LoadBalancer loadBalancer() {
         return new NacosLoadBalancer();
     }
