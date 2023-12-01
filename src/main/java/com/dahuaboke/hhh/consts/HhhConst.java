@@ -6,6 +6,7 @@ package com.dahuaboke.hhh.consts;
  */
 public class HhhConst {
 
+    public static final String MAIN_BASE_PACKAGE = "hhh.main.base.package";
     public static final String SCAN_BASE_PACKAGE = "hhh.package.scanner";
     public static final String ENABLE_HTTPS = "hhh.enableHttps";
     public static final String DEFAULT_REQUEST_CONTENT_TYPE = "application/json; charset=utf-8";

@@ -1,7 +1,6 @@
 package com.dahuaboke.hhh.bean;
 
 import com.dahuaboke.hhh.HhhConfig;
-import com.dahuaboke.hhh.SocketContext;
 import com.dahuaboke.hhh.annotation.Hhh;
 import com.dahuaboke.hhh.consts.HhhConst;
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
@@ -20,10 +19,9 @@ import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
+import org.springframework.util.StringUtils;
 
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Supplier;
 
 /**
@@ -34,10 +32,20 @@ import java.util.function.Supplier;
 public class ClientBeanProcessor implements ImportBeanDefinitionRegistrar, EnvironmentAware {
 
     private Environment environment;
-
+    
     @Override
     public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
         Set<BeanDefinition> beanDefinitionSet = new LinkedHashSet();
+        List<String> basePackages = new ArrayList();
+        String basePackagesStr = environment.getProperty(HhhConst.SCAN_BASE_PACKAGE, "");
+        if (StringUtils.isEmpty(basePackagesStr)) {
+            String mainBasePackage = System.getProperty(HhhConst.MAIN_BASE_PACKAGE, "");
+            if (!StringUtils.isEmpty(mainBasePackage)) {
+                basePackages.add(mainBasePackage);
+            }
+        } else {
+            basePackages.addAll(Arrays.asList(basePackagesStr.split(",")));
+        }
         ClassPathScanningCandidateComponentProvider scanner = new ClassPathScanningCandidateComponentProvider(false, this.environment) {
             @Override
             protected boolean isCandidateComponent(
@@ -52,11 +60,9 @@ public class ClientBeanProcessor implements ImportBeanDefinitionRegistrar, Envir
             }
         };
         scanner.addIncludeFilter(new AnnotationTypeFilter(Hhh.class));
-        String basePackages = environment.getProperty(HhhConst.SCAN_BASE_PACKAGE);
-        for (String basePackage : basePackages.split(",")) {
+        for (String basePackage : basePackages) {
             beanDefinitionSet.addAll(scanner.findCandidateComponents(basePackage));
         }
-
         for (BeanDefinition candidateComponent : beanDefinitionSet) {
             if (candidateComponent instanceof AnnotatedBeanDefinition) {
                 AnnotatedBeanDefinition beanDefinition = (AnnotatedBeanDefinition) candidateComponent;

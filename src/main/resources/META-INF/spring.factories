@@ -1,2 +1,4 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   com.dahuaboke.hhh.config.HhhAutoConfiguration
+org.springframework.boot.SpringApplicationRunListener=\
+  com.dahuaboke.hhh.config.HhhApplicationRunListener
