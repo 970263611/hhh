@@ -32,7 +32,7 @@ import java.util.function.Supplier;
 public class ClientBeanProcessor implements ImportBeanDefinitionRegistrar, EnvironmentAware {
 
     private Environment environment;
-    
+
     @Override
     public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
         Set<BeanDefinition> beanDefinitionSet = new LinkedHashSet();
