@@ -8,7 +8,7 @@ HHH组件名字含义为Healthy、Happiness、Handsome
 
 [GitHub - 970263611/rpc: 自己编写的rpc调用框架，配置简单，使用更简单，如果您感觉有用请点赞，纯个人手写](https://github.com/970263611/rpc)
 
-如今我又对http协议的openfeign进行了仿写（组件亦可支持其他协议）。首先是支持了openfeign的主流功能，整合了spring mvc。其次我根据springmvc对于参数解析自动匹配到变量名这个能力，移植到了我写的hhh组件上了，但是由于是面向接口调用，所以需要jdk支持1.8+，且添加了编译参数-parameters参数。组件默认采用jackson为编码/解码器，okhttp为网络请求组件，注册中心默认实现为nacos。
+如今我又对http协议的openfeign进行了仿写（组件亦可支持其他协议）。首先是支持了openfeign的主流功能，整合了spring mvc。其次我根据springmvc对于参数解析自动匹配到变量名这个能力，移植到了我写的hhh组件上了，但是由于是面向接口调用，所以需要jdk支持1.8+，且添加了编译参数-parameters参数。如果没有添加编译参数可以通过@RequestParam修饰来传值（这个就是feign目前的实现方案）。组件默认采用jackson为编码/解码器，okhttp为网络请求组件，注册中心默认实现为nacos。
 
 ### 使用须知
 
